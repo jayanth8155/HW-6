@@ -1,29 +1,28 @@
 const express = require("express");
 const cors = require("cors");
-const playerRoutes = require("./routes/players");
+const teamRoutes = require("./routes/teamRoutes"); 
 const mongoose = require("mongoose");
 const app = express();
 const port = 3000;
 
-// enable cross-origin resource sharing through CORS middleware
 app.use(cors());
-
-// request log middleware
 app.use(express.json());
+
+// Logging middleware
 app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
 
-app.use("/api/players", playerRoutes);
+app.use("/api/team", teamRoutes); // Updated endpoint
 
-// Connect to local MongoDB instance
+// Connect to your horse racing database
 mongoose
-  .connect("mongodb://localhost:27017/Packers")
+  .connect("mongodb://localhost:27017/HorseRacingTeam")
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(port, () => {
-      console.log("Example app listening on port " + port);
+      console.log(`Server running on port ${port}`);
     });
   })
-  .catch((err) => console.error("Failed to connect", err));
+  .catch((err) => console.error("Connection failed:", err));
